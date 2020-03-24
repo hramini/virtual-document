@@ -1,0 +1,22 @@
+# Directories
+node_modules
+bower_modules
+coverage
+
+# OS-related things
+.DS_Store
+
+# IDE-related things
+.vscode
+.idea
+
+# config files
+package-lock.json
+
+# generated files
+lib/**/*.map
+lib/**/*.js
+lib/**/*.d.ts
+app/**/*.map
+app/**/*.js
+app/**/*.d.ts

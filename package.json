@@ -1,0 +1,28 @@
+{
+  "name": "virtual-document",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/virtual-document-expose",
+  "types": "./dist/virtual-document-types.d.ts",
+  "typings": "./dist/virtual-document-types.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest --watchAll --coverage",
+    "tsc:compile": "rm -rf ./dist && tsc -p ./tsconfig.json --declarationMap false --sourceMap false --outDir dist",
+    "tsc:test": "tsc -p ./tsconfig.json --noEmitOnError false --watch",
+    "dts": "dts-bundle-generator -o dist/ui-dom-types.d.ts lib/ui-dom-expose.ts"
+  },
+  "author": "hmd-amini",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "7.8.7",
+    "@babel/preset-env": "7.8.7",
+    "@babel/preset-typescript": "7.8.3",
+    "@types/jest": "25.1.2",
+    "dts-bundle-generator": "4.0.0",
+    "jest": "25.1.0",
+    "typescript": "3.7.5"
+  }
+}
