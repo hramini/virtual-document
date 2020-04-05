@@ -30,7 +30,7 @@ export interface IVirtualDocumentFindElementByIdIn {
 }
 
 export interface IVirtualDocumentMakeElementIn {
-  tagName: ElementTag;
+  tagName: string | ElementTag;
 }
 
 export interface IVirtualDocumentSetIdIn {

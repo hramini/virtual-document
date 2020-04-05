@@ -44,6 +44,20 @@ describe('@CustomDocument', (): void => {
 
       expect(tagName).toBe('div');
     });
+
+    test('make element with empty tagName should cause an error', (): void => {
+      let elementTagName: string;
+
+      try {
+        const {
+          element: { tagName }
+        } = virtualDom.makeElement({ tagName: '' });
+        elementTagName = tagName;
+      } catch {
+        elementTagName = 'error';
+      }
+      expect(elementTagName).toBe('error');
+    });
   });
 
   describe('#appendToDoc', (): void => {
