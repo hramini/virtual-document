@@ -1,18 +1,17 @@
 {
   "name": "virtual-document",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "./dist/virtual-document-expose",
   "types": "./dist/virtual-document-types.d.ts",
   "typings": "./dist/virtual-document-types.d.ts",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "test": "jest --watchAll --coverage",
     "tsc:compile": "rm -rf ./dist && tsc -p ./tsconfig.json --declarationMap false --sourceMap false --outDir dist",
     "tsc:test": "tsc -p ./tsconfig.json --noEmitOnError false --watch",
-    "dts": "dts-bundle-generator -o dist/ui-dom-types.d.ts lib/ui-dom-expose.ts"
+    "dts": "dts-bundle-generator -o dist/virtual-document-types.d.ts lib/virtual-document-expose.ts",
+    "lint": "eslint --config ./.eslintrc.json --ext '.ts','.tsx' --fix . && echo 'Linted Successfully!'"
   },
   "author": "hmd-amini",
   "license": "ISC",
@@ -21,7 +20,10 @@
     "@babel/preset-env": "7.8.7",
     "@babel/preset-typescript": "7.8.3",
     "@types/jest": "25.1.2",
+    "@typescript-eslint/eslint-plugin": "2.25.0",
+    "@typescript-eslint/parser": "2.25.0",
     "dts-bundle-generator": "4.0.0",
+    "eslint": "6.8.0",
     "jest": "25.1.0",
     "typescript": "3.7.5"
   }

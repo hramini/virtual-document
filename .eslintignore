@@ -1,0 +1,11 @@
+tsconfig.json
+package.json
+jest.config.js
+.npmrc
+.gitignore
+.eslintignore
+.prettierrc
+.editorconfig
+.babelrc
+**/*.map
+**/*.d.ts

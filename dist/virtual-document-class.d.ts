@@ -1,19 +1,19 @@
-import { FoundElement, IDocument, IElementCollection, IElementId, IVirtualDocumentAppendIn, IVirtualDocumentAppendStringIn, IVirtualDocumentEntry, IVirtualDocumentFindAttributeIn, IVirtualDocumentFindAttributeOut, IVirtualDocumentFindElementsByTagNameIn, IVirtualDocumentFindFirstElementByQueryIn, IVirtualDocumentFindFirstElementByQueryOut, IVirtualDocumentMakeElementOut, IVirtualDocumentReplaceElementsIn, IVirtualDocumentSetAttributeIn, IVirtualDocumentSetIdIn, MakeElementOption } from './virtual-document-interface';
+import { IVirtualDocumentAppendIn, IVirtualDocumentAppendToDocIn, IVirtualDocumentEntry, IVirtualDocumentExportDocumentOut, IVirtualDocumentFindAttributeIn, IVirtualDocumentFindAttributeOut, IVirtualDocumentFindElementByIdIn, IVirtualDocumentFindElementByIdOut, IVirtualDocumentFindElementsByTagNameIn, IVirtualDocumentFindElementsByTagNameInDocIn, IVirtualDocumentFindElementsByTagNameInDocOut, IVirtualDocumentFindElementsByTagNameOut, IVirtualDocumentFindFirstElementByQueryIn, IVirtualDocumentFindFirstElementByQueryOut, IVirtualDocumentGetParentElementIn, IVirtualDocumentGetParentElementOut, IVirtualDocumentMakeElementIn, IVirtualDocumentMakeElementOut, IVirtualDocumentReplaceElementsIn, IVirtualDocumentSetAttributeIn, IVirtualDocumentSetIdIn, IVirtualDocumentSetInnerHtmlIn } from './virtual-document-interface';
 export declare class VirtualDocument {
-    private doc;
+    private readonly doc;
     constructor(entry?: IVirtualDocumentEntry);
-    createBase(): void;
-    makeElement(param: MakeElementOption): IVirtualDocumentMakeElementOut;
-    findElementById(param: IElementId): FoundElement;
-    append(param: IVirtualDocumentAppendIn): void;
-    appendString(param: IVirtualDocumentAppendStringIn): void;
-    setId(param: IVirtualDocumentSetIdIn): void;
-    replaceElements<T extends Element>(param: IVirtualDocumentReplaceElementsIn<T>): void;
-    setAttribute(param: IVirtualDocumentSetAttributeIn): void;
-    findAttribute(param: IVirtualDocumentFindAttributeIn): IVirtualDocumentFindAttributeOut;
-    findParentElementByChildId(param: IElementId): FoundElement;
-    findElementsByTagName(param: IVirtualDocumentFindElementsByTagNameIn): IElementCollection;
+    makeElement(param: IVirtualDocumentMakeElementIn): IVirtualDocumentMakeElementOut;
+    findElementById(param: IVirtualDocumentFindElementByIdIn): IVirtualDocumentFindElementByIdOut;
+    appendToDoc(param: IVirtualDocumentAppendToDocIn): void;
+    findElementsByTagNameInDoc(param: IVirtualDocumentFindElementsByTagNameInDocIn): IVirtualDocumentFindElementsByTagNameInDocOut;
     findFirstElementByQuery(param: IVirtualDocumentFindFirstElementByQueryIn): IVirtualDocumentFindFirstElementByQueryOut;
-    exportDocument(): IDocument;
-    private checkStringLength;
+    exportDocument(): IVirtualDocumentExportDocumentOut;
+    static append(param: IVirtualDocumentAppendIn): void;
+    static setId(param: IVirtualDocumentSetIdIn): void;
+    static setInnerHtml(param: IVirtualDocumentSetInnerHtmlIn): void;
+    static findElementsByTagName(param: IVirtualDocumentFindElementsByTagNameIn): IVirtualDocumentFindElementsByTagNameOut;
+    static replaceElements<T extends Element>(param: IVirtualDocumentReplaceElementsIn<T>): void;
+    static setAttribute(param: IVirtualDocumentSetAttributeIn): void;
+    static findAttribute(param: IVirtualDocumentFindAttributeIn): IVirtualDocumentFindAttributeOut;
+    static getParentElement(param: IVirtualDocumentGetParentElementIn): IVirtualDocumentGetParentElementOut;
 }

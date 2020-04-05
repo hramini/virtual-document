@@ -1,39 +1,49 @@
-export interface FoundElement {
+import { ElementTag } from './virtual-document-enum';
+export interface IVirtualDocumentFindElementByIdOut {
     isFound: boolean;
     element: HTMLElement;
 }
 export interface IVirtualDocumentMakeElementOut {
     element: HTMLElement;
 }
-export interface IElementCollection {
+export interface IVirtualDocumentFindElementsByTagNameInDocOut {
     elementCollection: HTMLCollection;
 }
-export interface IDocument {
+export interface IVirtualDocumentFindElementsByTagNameOut {
+    elementCollection: HTMLCollection;
+}
+export interface IVirtualDocumentExportDocumentOut {
     doc: Document;
 }
 export interface IVirtualDocumentEntry {
     doc: Document;
 }
-export interface IElementId {
-    id: string;
+export interface IVirtualDocumentFindElementByIdIn {
+    identifier: string;
 }
-export interface MakeElementOption {
-    tagName: string;
+export interface IVirtualDocumentMakeElementIn {
+    tagName: ElementTag;
 }
 export interface IVirtualDocumentSetIdIn {
-    id: string;
+    identifier: string;
     source: HTMLElement;
 }
-export interface IVirtualDocumentAppendIn {
-    source?: HTMLElement | Document;
+export interface IVirtualDocumentSetInnerHtmlIn {
+    innerHtml: string;
+    source: HTMLElement;
+}
+export interface IVirtualDocumentAppendToDocIn {
     element: HTMLElement;
 }
-export interface IVirtualDocumentAppendStringIn {
+export interface IVirtualDocumentAppendIn {
     source: HTMLElement;
-    text: string;
+    element: HTMLElement | string;
+}
+export interface IVirtualDocumentFindElementsByTagNameInDocIn {
+    tagName: string;
 }
 export interface IVirtualDocumentFindElementsByTagNameIn {
-    source?: HTMLElement | Document;
+    source: HTMLElement;
     tagName: string;
 }
 export interface IVirtualDocumentCheckStringLengthIn {
@@ -66,4 +76,11 @@ export interface IVirtualDocumentFindFirstElementByQueryOut {
 export interface IVirtualDocumentReplaceElementsIn<T extends Element> {
     sourceElement: T;
     replaceableElement: T;
+}
+export interface IVirtualDocumentGetParentElementIn {
+    element: HTMLElement;
+}
+export interface IVirtualDocumentGetParentElementOut {
+    isFound: boolean;
+    parentElement: HTMLElement;
 }
