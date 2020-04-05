@@ -22,7 +22,7 @@ export interface IVirtualDocumentFindElementByIdIn {
     identifier: string;
 }
 export interface IVirtualDocumentMakeElementIn {
-    tagName: ElementTag;
+    tagName: string | ElementTag;
 }
 export interface IVirtualDocumentSetIdIn {
     identifier: string;

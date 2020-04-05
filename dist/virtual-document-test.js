@@ -30,6 +30,17 @@ describe('@CustomDocument', () => {
             const { element: { tagName } } = virtualDom.makeElement({ tagName: virtual_document_enum_1.ElementTag.DIV });
             expect(tagName).toBe('div');
         });
+        test('make element with empty tagName should cause an error', () => {
+            let elementTagName;
+            try {
+                const { element: { tagName } } = virtualDom.makeElement({ tagName: '' });
+                elementTagName = tagName;
+            }
+            catch (_a) {
+                elementTagName = 'error';
+            }
+            expect(elementTagName).toBe('error');
+        });
     });
     describe('#appendToDoc', () => {
         let virtualDom;
