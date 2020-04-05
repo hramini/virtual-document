@@ -164,5 +164,13 @@ export declare class VirtualDocument {
 	static findAttribute(param: IVirtualDocumentFindAttributeIn): IVirtualDocumentFindAttributeOut;
 	static getParentElement(param: IVirtualDocumentGetParentElementIn): IVirtualDocumentGetParentElementOut;
 }
+export interface IVirtualDocumentDemoEntry {
+	virtualDocument: VirtualDocument;
+}
+export declare class VirtualDocumentDemo {
+	private readonly virtualDocument;
+	constructor(entry: IVirtualDocumentDemoEntry);
+	createBase(): void;
+}
 
 export {};
