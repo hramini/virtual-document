@@ -5,8 +5,15 @@ import { VirtualDocumentDemo } from './virtual-document-demo-class';
 import { ElementTag } from './virtual-document-enum';
 
 describe('@CustomDocument', (): void => {
+  const testElementTag: ElementTag = ElementTag.DIV;
+  const testElementId: string = 'test_id';
+  const testElementRootId: string = 'root';
+  const testElementInnerText: string = 'test-inner-text';
+  const testAttributeKey: string = 'test-key';
+  const testAttributeValue: string = 'test-value';
+
   describe('#constructor', (): void => {
-    test('virtualDom without entry document should be an empty document', (): void => {
+    test('expects new instance without entry to be an empty document', (): void => {
       const virtualDom: VirtualDocument = new VirtualDocument();
       const {
         elementCollection: { length }
@@ -15,7 +22,7 @@ describe('@CustomDocument', (): void => {
       expect(length).toBe(0);
     });
 
-    test('virtualDom with non-empty entry document should be an empty document', (): void => {
+    test('expects new instance with entry to have a body', (): void => {
       const doc: Document = new Document();
       const html: HTMLElement = doc.createElement('html');
       const body: HTMLElement = doc.createElement('body');
@@ -37,15 +44,15 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('make element should create a new element in this virtual dom', (): void => {
+    test(`expects to create a new element with "${testElementTag}" as tagName`, (): void => {
       const {
         element: { tagName }
-      } = virtualDom.makeElement({ tagName: ElementTag.DIV });
+      } = virtualDom.makeElement({ tagName: testElementTag });
 
-      expect(tagName).toBe('div');
+      expect(tagName).toBe(testElementTag);
     });
 
-    test('make element with empty tagName should cause an error', (): void => {
+    test('expects an error when trying to create an element with an empty string for its tagName', (): void => {
       let elementTagName: string;
 
       try {
@@ -56,6 +63,7 @@ describe('@CustomDocument', (): void => {
       } catch {
         elementTagName = 'error';
       }
+
       expect(elementTagName).toBe('error');
     });
   });
@@ -66,18 +74,20 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('append an element to virtualDom', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test(`expect document to have an element with "${testElementTag}" tagName and "${testElementId}" id`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       virtualDom.appendToDoc({
         element
       });
 
       const {
-        element: { tagName }
-      } = virtualDom.findElementById({ identifier: 'test_id' });
+        // eslint-disable-next-line id-length
+        element: { tagName, id: elementId }
+      } = virtualDom.findElementById({ identifier: testElementId });
 
-      expect(tagName).toBe('div');
+      expect(tagName).toBe(testElementTag);
+      expect(elementId).toBe(testElementId);
     });
   });
 
@@ -87,9 +97,9 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('append an element to element', (): void => {
+    test(`expect main tag to have a element with "${testElementTag}" tagName`, (): void => {
       const { element: source } = virtualDom.makeElement({ tagName: ElementTag.MAIN });
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
       VirtualDocument.append({
         source,
         element
@@ -98,30 +108,28 @@ describe('@CustomDocument', (): void => {
         elementCollection: { length }
       } = VirtualDocument.findElementsByTagName({
         source,
-        tagName: 'div'
+        tagName: testElementTag
       });
 
       expect(length).toBe(1);
     });
 
-    test('append an string to element', (): void => {
+    test(`expect main tag to have an innerHTML with "${testElementInnerText}" value`, (): void => {
       const { element: source } = virtualDom.makeElement({ tagName: ElementTag.MAIN });
-      const element: string = 'inner-element';
       VirtualDocument.append({
         source,
-        element
+        element: testElementInnerText
       });
-      const { innerHTML } = source;
+      const { innerHTML: elementInnerHtml } = source;
 
-      expect(innerHTML).toBe('inner-element');
+      expect(elementInnerHtml).toBe(testElementInnerText);
     });
 
-    test('append an empty string to element', (): void => {
+    test('expect main tag to have an innerHTML with empty value', (): void => {
       const { element: source } = virtualDom.makeElement({ tagName: ElementTag.MAIN });
-      const element: string = '';
       VirtualDocument.append({
         source,
-        element
+        element: ''
       });
       const { innerHTML } = source;
 
@@ -135,13 +143,13 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('setId to an element', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test(`expects element to have an id with "${testElementId}" value`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       // eslint-disable-next-line id-length
       const { id: elementId } = element;
 
-      expect(elementId).toBe('test_id');
+      expect(elementId).toBe(testElementId);
     });
   });
 
@@ -151,12 +159,12 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('setId to an element', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setInnerHtml({ source: element, innerHtml: 'test_text' });
+    test(`expects element to have an "${testElementInnerText}" as its innerHTML`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setInnerHtml({ source: element, innerHtml: testElementInnerText });
       const { innerHTML } = element;
 
-      expect(innerHTML).toBe('test_text');
+      expect(innerHTML).toBe(testElementInnerText);
     });
   });
 
@@ -166,15 +174,15 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('set attribute to an element', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
+    test(`expects element to have an attribute with "${testAttributeKey}" key and "${testAttributeValue}" value`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
       VirtualDocument.setAttribute({
         sourceElement: element,
-        attributeKey: 'test-key',
-        attributeValue: 'test-value'
+        attributeKey: testAttributeKey,
+        attributeValue: testAttributeValue
       });
 
-      expect(element.getAttribute('test-key')).toBe('test-value');
+      expect(element.getAttribute(testAttributeKey)).toBe(testAttributeValue);
     });
   });
 
@@ -184,27 +192,23 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('find attribute to an element', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setAttribute({
-        sourceElement: element,
-        attributeKey: 'test-key',
-        attributeValue: 'test-value'
-      });
+    test(`expects element to have an attribute with "${testAttributeKey}" key and "${testAttributeValue}" value`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      element.setAttribute(testAttributeKey, testAttributeValue);
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
         sourceElement: element,
-        attributeKey: 'test-key'
+        attributeKey: testAttributeKey
       });
 
       expect(isFound).toBeTruthy();
-      expect(attributeValue).toBe('test-value');
+      expect(attributeValue).toBe(testAttributeValue);
     });
 
-    test('find attribute to an element', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
+    test('expects element to not found the attribute', (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
       const { isFound, attributeValue } = VirtualDocument.findAttribute({
         sourceElement: element,
-        attributeKey: 'test-key'
+        attributeKey: testAttributeKey
       });
 
       expect(isFound).toBeFalsy();
@@ -220,10 +224,12 @@ describe('@CustomDocument', (): void => {
       virtualDomDemo = new VirtualDocumentDemo({ virtualDocument: virtualDom });
     });
 
-    test('replace element with new element', (): void => {
+    test(`expects an element with "${testElementRootId}" id to be replaced with another element with "${testElementId}" id`, (): void => {
       virtualDomDemo.createBase();
-      const { element: newElementToReplace } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      const { element: rootElement } = virtualDom.findElementById({ identifier: 'root' });
+      const { element: newElementToReplace } = virtualDom.makeElement({ tagName: testElementTag });
+      const { element: rootElement } = virtualDom.findElementById({
+        identifier: testElementRootId
+      });
       const {
         elementCollection: {
           0: {
@@ -238,7 +244,7 @@ describe('@CustomDocument', (): void => {
 
       VirtualDocument.setId({
         source: newElementToReplace,
-        identifier: 'test_id'
+        identifier: testElementId
       });
       VirtualDocument.replaceElements({
         sourceElement: rootElement,
@@ -256,8 +262,8 @@ describe('@CustomDocument', (): void => {
       // eslint-disable-next-line id-length
       const { id: bodyElementIDAfterReplacement } = elementChildAfterReplacement;
 
-      expect(bodyElementIDBeforeReplacement).toBe('root');
-      expect(bodyElementIDAfterReplacement).toBe('test_id');
+      expect(bodyElementIDBeforeReplacement).toBe(testElementRootId);
+      expect(bodyElementIDAfterReplacement).toBe(testElementId);
     });
   });
 
@@ -267,34 +273,34 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('testing find element by its id for an existing element', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test(`expects to find an element with "${testElementTag}" tagName and "${testElementId}" id`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       virtualDom.appendToDoc({ element });
       const {
         isFound,
         // eslint-disable-next-line id-length
         element: { tagName, id: identifier }
-      } = virtualDom.findElementById({ identifier: 'test_id' });
+      } = virtualDom.findElementById({ identifier: testElementId });
 
       expect(isFound).toBeTruthy();
-      expect(tagName).toBe('div');
-      expect(identifier).toBe('test_id');
+      expect(tagName).toBe(testElementTag);
+      expect(identifier).toBe(testElementId);
     });
 
-    test('testing find element by its id for not existed element', (): void => {
+    test(`expect to not find any element with "${testElementId}" id`, (): void => {
       const {
         isFound,
         // eslint-disable-next-line id-length
         element: { tagName, id: identifier }
-      } = virtualDom.findElementById({ identifier: 'test_id' });
+      } = virtualDom.findElementById({ identifier: testElementId });
 
       expect(isFound).toBeFalsy();
       expect(tagName).toBeUndefined();
       expect(identifier).toBeUndefined();
     });
 
-    test('testing find element by its id for empty id', (): void => {
+    test('expect to not find any element with empty id', (): void => {
       const {
         isFound,
         // eslint-disable-next-line id-length
@@ -309,29 +315,30 @@ describe('@CustomDocument', (): void => {
 
   describe('$#getParentElement', (): void => {
     let virtualDom: VirtualDocument;
+    const mainElementTag: ElementTag = ElementTag.MAIN;
     beforeEach((): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('find parent element by its child id for existed id', (): void => {
-      const { element: parentElement } = virtualDom.makeElement({ tagName: ElementTag.MAIN });
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test(`expects the parent element of "${testElementTag}" element to be an element with  tagName`, (): void => {
+      const { element: parentElement } = virtualDom.makeElement({ tagName: mainElementTag });
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       VirtualDocument.append({ source: parentElement, element });
       virtualDom.appendToDoc({ element: parentElement });
 
-      const { element: childElement } = virtualDom.findElementById({ identifier: 'test_id' });
+      const { element: childElement } = virtualDom.findElementById({ identifier: testElementId });
       const {
         isFound,
         parentElement: { tagName }
       } = VirtualDocument.getParentElement({ element: childElement });
 
       expect(isFound).toBeTruthy();
-      expect(tagName).toBe('main');
+      expect(tagName).toBe(mainElementTag);
     });
 
-    test('find parent element by its child id for not existed id', (): void => {
-      const { element } = virtualDom.findElementById({ identifier: 'test_id' });
+    test(`expects to not find "${testElementId}" element's parent`, (): void => {
+      const { element } = virtualDom.findElementById({ identifier: testElementId });
       const {
         isFound,
         parentElement: { tagName }
@@ -348,13 +355,12 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('find an element from main doc by its tag name', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
+    test(`expects to find an element with "${testElementTag}" tagName in the document`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
       virtualDom.appendToDoc({ element });
-
       const {
         elementCollection: { length }
-      } = virtualDom.findElementsByTagNameInDoc({ tagName: 'div' });
+      } = virtualDom.findElementsByTagNameInDoc({ tagName: testElementTag });
 
       expect(length).toBe(1);
     });
@@ -366,9 +372,9 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('find an element from another by its tag name', (): void => {
+    test(`expects to find an element with "${testElementTag}" tagName in the main element`, (): void => {
       const { element: parentElement } = virtualDom.makeElement({ tagName: ElementTag.MAIN });
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
       VirtualDocument.append({ source: parentElement, element });
       virtualDom.appendToDoc({ element: parentElement });
 
@@ -376,7 +382,7 @@ describe('@CustomDocument', (): void => {
         elementCollection: { length }
       } = VirtualDocument.findElementsByTagName({
         source: parentElement,
-        tagName: 'div'
+        tagName: testElementTag
       });
 
       expect(length).toBe(1);
@@ -389,9 +395,9 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('find an element with query', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test(`expects to find an element with "${testElementTag}#${testElementId}" as query`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       virtualDom.appendToDoc({
         element
       });
@@ -403,19 +409,19 @@ describe('@CustomDocument', (): void => {
           id: identifier
         }
       } = virtualDom.findFirstElementByQuery({
-        query: 'div#test_id'
+        query: `${testElementTag}#${testElementId}`
       });
 
       expect(isFound).toBeTruthy();
-      expect(tagName.toLowerCase()).toBe('div');
-      expect(identifier).toBe('test_id');
+      expect(tagName.toLowerCase()).toBe(testElementTag);
+      expect(identifier).toBe(testElementId);
     });
 
-    test('could not find an element with query', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test('expects to not find any element with wrong query', (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       const { isFound, foundElement } = virtualDom.findFirstElementByQuery({
-        query: 'div#not_test_id'
+        query: `${testElementTag}#not_test_id`
       });
 
       expect(isFound).toBeFalsy();
@@ -429,14 +435,13 @@ describe('@CustomDocument', (): void => {
       virtualDom = new VirtualDocument();
     });
 
-    test('export document', (): void => {
-      const { element } = virtualDom.makeElement({ tagName: ElementTag.DIV });
-      VirtualDocument.setId({ source: element, identifier: 'test_id' });
+    test(`expects to find element with "${testElementId}" id of  exported document`, (): void => {
+      const { element } = virtualDom.makeElement({ tagName: testElementTag });
+      VirtualDocument.setId({ source: element, identifier: testElementId });
       virtualDom.appendToDoc({ element });
-
       const { doc } = virtualDom.exportDocument();
 
-      expect(doc.getElementById('test_id')).not.toBeNull();
+      expect(doc.getElementById(testElementId)).not.toBeNull();
     });
   });
 });
