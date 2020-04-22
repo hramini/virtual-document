@@ -82,7 +82,7 @@
     "global-require": "error",
     "guard-for-in": "error",
     "handle-callback-err": ["error", "^(error|.+Error)$"],
-    "id-blacklist": ["error", "data", "callback", "info", "sample", "separator"],
+    "id-blacklist": ["error", "data", "callback", "info", "sample", "separator", "Promise"],
     "id-length": ["error", { "min": 3 }],
     "id-match": "off",
     "implicit-arrow-linebreak": ["error", "beside"],
@@ -147,7 +147,7 @@
     "no-alert": "error",
     "no-array-constructor": "error",
     "no-await-in-loop": "error",
-    "no-bitwise": "error",
+    "no-bitwise": ["error", { "int32Hint": true, "allow": ["<<", ">>", "^", "~"] }],
     "no-buffer-constructor": "error",
     "no-caller": "error",
     "no-case-declarations": "error",
@@ -263,7 +263,7 @@
     ],
     "no-restricted-syntax": "off",
     "no-return-assign": ["error", "always"],
-    "no-return-await": "error",
+    "no-return-await": ["off"],
     "no-script-url": "error",
     "no-self-assign": ["error", { "props": true }],
     "no-self-compare": "error",
@@ -325,7 +325,7 @@
     "one-var": ["error", { "var": "always", "let": "never", "const": "never" }],
     "one-var-declaration-per-line": ["error", "always"],
     "operator-assignment": ["error", "always"],
-    "operator-linebreak": ["error", "after"],
+    "operator-linebreak": ["error", "after", { "overrides": { "?": "before", ":": "before" } }],
     "padded-blocks": ["error", "never"],
     "padding-line-between-statements": [
       "error",
@@ -384,7 +384,7 @@
         "memberSyntaxSortOrder": ["none", "all", "single", "multiple"]
       }
     ],
-    // "sort-keys": ["error", "asc", { "caseSensitive": true, "natural": true, "minKeys": 2 }],
+    "sort-keys": ["error", "asc", { "caseSensitive": true, "natural": true, "minKeys": 2 }],
     "sort-vars": ["error", { "ignoreCase": false }],
     "space-before-blocks": "off",
     "space-in-parens": ["error", "never"],
@@ -499,15 +499,15 @@
           "public-abstract-field",
           "protected-abstract-field",
           "private-abstract-field",
+          "public-abstract-method",
+          "protected-abstract-method",
+          "private-abstract-method",
           "public-constructor",
           "protected-constructor",
           "private-constructor",
           "public-instance-method",
           "protected-instance-method",
           "private-instance-method",
-          "public-abstract-method",
-          "protected-abstract-method",
-          "private-abstract-method",
           "public-static-method",
           "protected-static-method",
           "private-static-method"
@@ -516,10 +516,10 @@
     ],
     "@typescript-eslint/naming-convention": [
       "error",
-      { "selector": "variable", "format": ["camelCase"] },
+      { "selector": "variable", "format": ["camelCase", "PascalCase"] },
       { "selector": "function", "format": ["camelCase"] },
       { "selector": "parameter", "format": ["camelCase"] },
-      { "selector": "property", "format": ["camelCase"] },
+      { "selector": "property", "format": ["camelCase", "PascalCase"] },
       { "selector": "property", "modifiers": ["readonly", "static"], "format": ["UPPER_CASE"] },
       { "selector": "parameterProperty", "format": ["camelCase"] },
       { "selector": "method", "format": ["camelCase"] },
@@ -643,7 +643,7 @@
       "error",
       {
         "allowNumber": true,
-        "allowBoolean": false,
+        "allowBoolean": true,
         "allowNullable": false
       }
     ],
@@ -684,7 +684,7 @@
     "func-call-spacing": "off",
     "@typescript-eslint/func-call-spacing": ["error"],
     "indent": "off",
-    "@typescript-eslint/indent": ["error", 2],
+    "@typescript-eslint/indent": "off",
     "@typescript-eslint/no-array-constructor": "error",
     "no-dupe-class-members": "off",
     "@typescript-eslint/no-dupe-class-members": ["error"],
@@ -698,7 +698,40 @@
     "@typescript-eslint/no-magic-numbers": [
       "error",
       {
-        "ignore": [0, -1, 1, 2],
+        "ignore": [
+          -1, // nagatiator,
+          0, // index
+          0.5, // half
+          1, // 2^0, count
+          2, // 2^1, count, binary base
+          2.71828, // number e
+          3, // count
+          3.14159, // number pi
+          4, // 2^2, count, number of weeks in month
+          5, // count
+          7, // number of days in week
+          8, // 2^3, octa base
+          10, // decimal base
+          12, // number of month in year
+          16, // 2^4, hexadescimal
+          24, // number of hours in a day
+          28, // number of days in month
+          29, // number of days in month
+          30, // number of days in month
+          31, // number of days in month
+          32, // 2^5
+          52, // number of weeks in a year
+          60, // number of seconds in a minute
+          64, // 2^6
+          100, // percent usage, decade
+          128, // 2^7
+          256, // 2^8
+          365, // normal year days
+          366, // big year days
+          512, // 2^9
+          1000, // mili
+          1024 // the K in K-Bytes
+        ],
         "ignoreNumericLiteralTypes": false,
         "ignoreReadonlyClassProperties": true,
         "ignoreEnums": true
@@ -734,6 +767,13 @@
     "semi": "off",
     "@typescript-eslint/semi": ["error"],
     "space-before-function-paren": "off",
-    "@typescript-eslint/space-before-function-paren": ["error", "never"]
+    "@typescript-eslint/space-before-function-paren": [
+      "error",
+      {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ]
   }
 }

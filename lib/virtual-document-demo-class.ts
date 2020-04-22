@@ -11,16 +11,22 @@ export class VirtualDocumentDemo {
   }
 
   public createBase(): void {
-    const { element: htmlElement } = this.virtualDocument.makeElement({ tagName: ElementTag.HTML });
-    const { element: headElement } = this.virtualDocument.makeElement({ tagName: ElementTag.HEAD });
-    const { element: bodyElement } = this.virtualDocument.makeElement({ tagName: ElementTag.BODY });
-    const { element: rootDivElement } = this.virtualDocument.makeElement({
+    const { element: htmlElement } = this.virtualDocument.createNewElement({
+      tagName: ElementTag.HTML
+    });
+    const { element: headElement } = this.virtualDocument.createNewElement({
+      tagName: ElementTag.HEAD
+    });
+    const { element: bodyElement } = this.virtualDocument.createNewElement({
+      tagName: ElementTag.BODY
+    });
+    const { element: rootDivElement } = this.virtualDocument.createNewElement({
       tagName: ElementTag.DIV
     });
-    VirtualDocument.setId({ identifier: 'root', source: rootDivElement });
-    VirtualDocument.append({ source: bodyElement, element: rootDivElement });
-    VirtualDocument.append({ source: htmlElement, element: headElement });
-    VirtualDocument.append({ source: htmlElement, element: bodyElement });
+    VirtualDocument.setId({ element: rootDivElement, identifier: 'root' });
+    VirtualDocument.append({ appendTo: bodyElement, element: rootDivElement });
+    VirtualDocument.append({ appendTo: htmlElement, element: headElement });
+    VirtualDocument.append({ appendTo: htmlElement, element: bodyElement });
     this.virtualDocument.appendToDoc({ element: htmlElement });
   }
 }

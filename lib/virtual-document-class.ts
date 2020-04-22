@@ -1,6 +1,8 @@
 import {
   IVirtualDocumentAppendIn,
   IVirtualDocumentAppendToDocIn,
+  IVirtualDocumentCreateNewElementIn,
+  IVirtualDocumentCreateNewElementOut,
   IVirtualDocumentEntry,
   IVirtualDocumentExportDocumentOut,
   IVirtualDocumentFindAttributeIn,
@@ -15,8 +17,6 @@ import {
   IVirtualDocumentFindFirstElementByQueryOut,
   IVirtualDocumentGetParentElementIn,
   IVirtualDocumentGetParentElementOut,
-  IVirtualDocumentMakeElementIn,
-  IVirtualDocumentMakeElementOut,
   IVirtualDocumentReplaceElementsIn,
   IVirtualDocumentSetAttributeIn,
   IVirtualDocumentSetIdIn,
@@ -35,7 +35,9 @@ export class VirtualDocument {
     }
   }
 
-  public makeElement(param: IVirtualDocumentMakeElementIn): IVirtualDocumentMakeElementOut {
+  public createNewElement(
+    param: IVirtualDocumentCreateNewElementIn
+  ): IVirtualDocumentCreateNewElementOut {
     const { tagName } = param;
     const { doc } = this;
     const element: HTMLElement = doc.createElement(tagName);
@@ -46,14 +48,14 @@ export class VirtualDocument {
   public findElementById(
     param: IVirtualDocumentFindElementByIdIn
   ): IVirtualDocumentFindElementByIdOut {
-    const { identifier } = param;
+    const { elementId } = param;
     const { doc } = this;
-    const element: HTMLElement | null = doc.getElementById(identifier);
+    const element: HTMLElement | null = doc.getElementById(elementId);
 
     return {
-      isFound: !!element,
       // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      element: element ?? ({} as HTMLElement)
+      element: element ?? ({} as HTMLElement),
+      isFound: !!element
     };
   }
 
@@ -81,7 +83,7 @@ export class VirtualDocument {
     const element: Element | null = doc.querySelector(query);
 
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return { isFound: !!element, foundElement: element ?? ({} as HTMLElement) };
+    return { element: element ?? ({} as HTMLElement), isFound: !!element };
   }
 
   public exportDocument(): IVirtualDocumentExportDocumentOut {
@@ -91,26 +93,26 @@ export class VirtualDocument {
   }
 
   public static append(param: IVirtualDocumentAppendIn): void {
-    const { source, element } = param;
-    source.append(element);
+    const { appendTo, element } = param;
+    appendTo.append(element);
   }
 
   public static setId(param: IVirtualDocumentSetIdIn): void {
-    const { source, identifier } = param;
+    const { element, identifier } = param;
     // eslint-disable-next-line id-length
-    source.id = identifier;
+    element.id = identifier;
   }
 
   public static setInnerHtml(param: IVirtualDocumentSetInnerHtmlIn): void {
-    const { source, innerHtml } = param;
-    source.innerHTML = innerHtml;
+    const { element, innerHtml } = param;
+    element.innerHTML = innerHtml;
   }
 
   public static findElementsByTagName(
     param: IVirtualDocumentFindElementsByTagNameIn
   ): IVirtualDocumentFindElementsByTagNameOut {
-    const { source, tagName } = param;
-    const elementCollection: HTMLCollection = source.getElementsByTagName(tagName);
+    const { element, tagName } = param;
+    const elementCollection: HTMLCollection = element.getElementsByTagName(tagName);
 
     return { elementCollection };
   }
@@ -123,22 +125,22 @@ export class VirtualDocument {
   }
 
   public static setAttribute(param: IVirtualDocumentSetAttributeIn): void {
-    const { sourceElement, attributeKey, attributeValue } = param;
-    sourceElement.setAttribute(attributeKey, attributeValue);
+    const { element, attributeKey, attributeValue } = param;
+    element.setAttribute(attributeKey, attributeValue);
   }
 
   public static findAttribute(
     param: IVirtualDocumentFindAttributeIn
   ): IVirtualDocumentFindAttributeOut {
-    const { sourceElement, attributeKey } = param;
-    const foundAttribute: string | null = sourceElement.getAttribute(attributeKey);
+    const { element, attributeKey } = param;
+    const foundAttribute: string | null = element.getAttribute(attributeKey);
 
     // TODO: replace with the method in validator class
     if (foundAttribute !== null) {
-      return { isFound: true, attributeValue: foundAttribute };
+      return { attributeValue: foundAttribute, isFound: true };
     }
 
-    return { isFound: false, attributeValue: '' };
+    return { attributeValue: '', isFound: false };
   }
 
   public static getParentElement(
